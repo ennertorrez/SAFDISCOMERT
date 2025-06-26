@@ -42,7 +42,7 @@ public class ActivityScannPrincipal  extends AppCompatActivity {
     private RadioButton rbDesactivado;
     private RadioGroup rgEstado;
     private EditText txtCodigo,txtCodigoBarra;
-    private TextView  txtDescripcion, txtExistencia, txtPrecio1, txtPrecio1b,txtPrecio2,txtPrecio2b,txtPrecio3,txtPrecio3b,txtProveedor,txtBodega;
+    private TextView  txtDescripcion, txtExistencia, txtPrecio1, txtPrecio1b,txtPrecio2,txtPrecio2b,txtPrecio3,txtPrecio3b,txtProveedor,txtBodega,txtPedido;
     final String urlDatosArticulo= variables_publicas.direccionIp + "/ServicioTotalArticulos.svc/BuscarInfoArticulo";
     private DecimalFormat df;
     private String TAG = ActivityScannPrincipal.class.getSimpleName();
@@ -74,7 +74,7 @@ public class ActivityScannPrincipal  extends AppCompatActivity {
         rbActivo = (RadioButton) findViewById(R.id.rbActivo);
         rbDesactivado = (RadioButton) findViewById(R.id.rbDesactivo);
         ingresarBtn = (Button) findViewById(R.id.btnIngresar);
-
+        txtPedido = (TextView)findViewById(R.id.txtPedidos);
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,6 +176,7 @@ public class ActivityScannPrincipal  extends AppCompatActivity {
                 txtDescripcion.setText("Error al obtener los datos");
                 rbActivo.setChecked(false);
                 txtExistencia.setText("");
+                txtPedido.setText("");
                 txtPrecio1.setText("");
                 txtPrecio1b.setText("");
                 txtPrecio2.setText("");
@@ -197,12 +198,13 @@ public class ActivityScannPrincipal  extends AppCompatActivity {
                     String vDescripion= c.getString("DESCRIPCION");
                     String vEstado = c.getString("ESTADO");
                     double vExistencia = Double.parseDouble(c.getString("EXISTENCIA"));
-                    double vPrecio1 = Double.parseDouble(c.getString("PRECIO1"));
+                    double vPrecio1 = Double.parseDouble(c.getString("PRECIO3"));
                     double vPrecio1b = Double.parseDouble(c.getString("PRECIO3"));
-                    double vPrecio2 = Double.parseDouble(c.getString("PRECIO2"));
-                    double vPrecio2b = Double.parseDouble(c.getString("PRECIO4"));
-                    double vPrecio3 = Double.parseDouble(c.getString("PRECIO5"));
-                    double vPrecio3b = Double.parseDouble(c.getString("PRECIO6"));
+                    double vPrecio2 = Double.parseDouble(c.getString("PRECIO4"));
+                    double vPrecio2b = Double.parseDouble(c.getString("CAMBIOP4"));
+                    double vPrecio3 = Double.parseDouble(c.getString("PRECIO6"));
+                    double vPrecio3b = Double.parseDouble(c.getString("CAMBIOP6"));
+                    double vPedido = Double.parseDouble(c.getString("EN_PEDIDO"));
                     String vProveedor = c.getString("PROVEEDOR");
                     String vBodega = c.getString("BODEGA");
 
@@ -215,6 +217,7 @@ public class ActivityScannPrincipal  extends AppCompatActivity {
                         rbActivo.setChecked(true);
                     }
                     txtExistencia.setText(df.format(vExistencia));
+                    txtPedido.setText(df.format(vPedido));
                     txtPrecio1.setText(df.format(vPrecio1));
                     txtPrecio1b.setText(df.format(vPrecio1b));
                     txtPrecio2.setText(df.format(vPrecio2));
@@ -230,6 +233,7 @@ public class ActivityScannPrincipal  extends AppCompatActivity {
                     txtDescripcion.setText("PRODUCTO NO ENCONTRADO");
                     rbActivo.setChecked(false);
                     txtExistencia.setText("");
+                    txtPedido.setText("");
                     txtPrecio1.setText("");
                     txtPrecio1b.setText("");
                     txtPrecio2.setText("");

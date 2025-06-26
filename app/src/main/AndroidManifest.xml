@@ -33,7 +33,6 @@
         android:maxSdkVersion="32" />
      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.Manifest.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
@@ -44,7 +43,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:screenOrientation="portrait"
         android:usesCleartextTraffic="true"
         android:name="androidx.multidex.MultiDexApplication">
 
@@ -54,8 +52,7 @@
 
         <activity android:name="com.safi_d.sistemas.safdiscomert.Principal.Login"
             android:configChanges="orientation"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -64,8 +61,7 @@
         </activity>
         <activity android:name="com.safi_d.sistemas.safdiscomert.Principal.MenuActivity"
             android:configChanges="orientation"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MenuActivity" />
 
@@ -91,7 +87,6 @@
         </activity>
         <activity android:name="com.safi_d.sistemas.safdiscomert.CodeBar.ActivityScannPrincipal" android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ActivityScannPrincipal" />
@@ -101,7 +96,6 @@
         </activity>
         <activity android:name="com.safi_d.sistemas.safdiscomert.CodeBar.ActivityScannear" android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ActivityScannear" />
@@ -118,8 +112,7 @@
              </activity>-->
         <activity android:name="com.safi_d.sistemas.safdiscomert.Pedidos.PedidosActivity" android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PedidosActivity" />
 
@@ -128,7 +121,6 @@
         </activity>
         <activity android:name="com.safi_d.sistemas.safdiscomert.Pedidos.PedidosCliente" android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PedidosCliente" />
@@ -138,8 +130,7 @@
         </activity>
         <activity android:name="com.safi_d.sistemas.safdiscomert.Clientes.ClientesNew" android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ClientesNew" />
 
@@ -149,8 +140,7 @@
 
         <activity android:name="com.safi_d.sistemas.safdiscomert.Informes.InformesActivity" android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.InformesActivity" />
 
@@ -160,8 +150,7 @@
 
         <activity android:name="com.safi_d.sistemas.safdiscomert.Informes.AgregarRecibo" android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.AgregarRecibo" />
 
@@ -170,8 +159,7 @@
         </activity>
         <activity android:name="com.safi_d.sistemas.safdiscomert.Clientes.ListaVentasHistClientes" android:windowSoftInputMode="stateHidden"
         android:configChanges="orientation"
-            android:exported="true"
-        android:screenOrientation="portrait">
+            android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.ListaVentasHistClientes" />
 
@@ -180,8 +168,7 @@
         </activity>
         <activity android:name="com.safi_d.sistemas.safdiscomert.Clientes.ClientesInactivosEdit" android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ClientesInactivosEdit" />
 
@@ -190,8 +177,7 @@
         </activity>
         <activity android:name="com.safi_d.sistemas.safdiscomert.Informes.ListaDetalleInformesClientes" android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ListaDetalleInformesClientes" />
 
@@ -201,8 +187,7 @@
         <activity android:name="com.safi_d.sistemas.safdiscomert.Informes.ListaFacturasMoraClientes" android:windowSoftInputMode="stateHidden"
 
             android:configChanges="orientation"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ListaFacturasMoraClientes" />
 
@@ -213,8 +198,7 @@
         <activity android:name="com.safi_d.sistemas.safdiscomert.Menu.ListaDetallePedidoFacturado" android:windowSoftInputMode="stateHidden"
 
             android:configChanges="orientation"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ListaDetallePedidoFacturado" />
 

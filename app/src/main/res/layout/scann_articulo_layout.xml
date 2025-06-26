@@ -208,10 +208,39 @@
         android:maxLines="1"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/lrPedidos"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/lrExis">
+        <TextView
+            android:id="@+id/lblPedidos"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="top"
+            android:gravity="center_vertical"
+            android:text="En Pedidos:"
+            android:textColor="@color/colorAccent"/>
+        <TextView
+            android:id="@+id/txtPedidos"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="0.66"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:background="@drawable/rounded_edittext"
+            android:maxLines="1"/>
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/lrExistencias_label"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@+id/lrExis">
+        android:layout_below="@+id/lrPedidos">
         <TextView
             android:id="@+id/lblPreciosPre"
             android:layout_width="180dp"
@@ -219,7 +248,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/borde_campos_pedidos"
-            android:text="PREVENTA"
+            android:text="PRECIOS POS"
             android:textAlignment="center"
             android:layout_gravity="center"
             android:gravity="center_vertical"
@@ -233,7 +262,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/borde_campos_pedidos"
-            android:text="POS"
+            android:text="UNIDADES MIN VENTA"
             android:textAlignment="center"
             android:layout_gravity="center"
             android:gravity="center_vertical"
@@ -279,6 +308,7 @@
             android:layout_gravity="top"
             android:gravity="center_vertical"
             android:text="Precio 1:"
+            android:visibility="invisible"
             android:textColor="@color/colorAccent"/>
         <TextView
             android:id="@+id/txtPrecio1b"
@@ -290,6 +320,7 @@
             android:textStyle="bold"
             android:textAlignment="center"
             android:background="@drawable/rounded_edittext"
+            android:visibility="invisible"
             android:maxLines="1"/>
     </LinearLayout>
     <LinearLayout
@@ -328,7 +359,7 @@
             android:layout_marginLeft="10dp"
             android:layout_gravity="top"
             android:gravity="center_vertical"
-            android:text="Precio 2:"
+            android:text="Unidades 2:"
             android:textColor="@color/colorAccent"/>
         <TextView
             android:id="@+id/txtPrecio2b"
@@ -378,7 +409,7 @@
             android:layout_marginLeft="10dp"
             android:layout_gravity="top"
             android:gravity="center_vertical"
-            android:text="Precio 3:"
+            android:text="Unidades 3:"
             android:textColor="@color/colorAccent"/>
         <TextView
             android:id="@+id/txtPrecio3b"
@@ -404,7 +435,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/borde_campos_pedidos"
-            android:text="Proveedor"
+            android:text="Bodega"
             android:textAlignment="center"
             android:layout_gravity="center"
             android:gravity="center_vertical"
@@ -413,39 +444,10 @@
             android:textStyle="bold" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/lrProvee"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/lrProveedor">
-        <TextView
-            android:id="@+id/lblProvee"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_marginTop="3dp"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="top"
-            android:gravity="center_vertical"
-            android:text="Proveedor:"
-            android:textColor="@color/colorAccent"/>
-        <TextView
-            android:id="@+id/txtProveedor"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_weight="0.66"
-            android:layout_marginRight="10dp"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:background="@drawable/rounded_edittext"
-            android:maxLines="1"/>
-    </LinearLayout>
-    <LinearLayout
         android:id="@+id/lrBodega"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@+id/lrProvee">
+        android:layout_below="@+id/lrProveedor">
         <TextView
             android:id="@+id/lblBodega"
             android:layout_width="80dp"
@@ -469,4 +471,36 @@
             android:background="@drawable/rounded_edittext"
             android:maxLines="1"/>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lrProvee"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/lrBodega">
+        <TextView
+            android:id="@+id/lblProvee"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="top"
+            android:gravity="center_vertical"
+            android:text="Proveedor:"
+            android:visibility="invisible"
+            android:textColor="@color/colorAccent"/>
+        <TextView
+            android:id="@+id/txtProveedor"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="0.66"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:visibility="invisible"
+            android:background="@drawable/rounded_edittext"
+            android:maxLines="1"/>
+    </LinearLayout>
+
 </RelativeLayout>

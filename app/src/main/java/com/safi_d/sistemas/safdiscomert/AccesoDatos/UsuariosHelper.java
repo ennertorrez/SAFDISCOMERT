@@ -1,6 +1,7 @@
 package com.safi_d.sistemas.safdiscomert.AccesoDatos;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -69,6 +70,21 @@ public class UsuariosHelper {
         }
         c.close();
         return usuario;
+    }
+    @SuppressLint("Range")
+    public int BuscarCodigoUsuarios(String Usuario) {
+        String selectQuery="SELECT * FROM " + variables_publicas.TABLE_USUARIOS
+                + " WHERE UPPER("+variables_publicas.USUARIOS_COLUMN_Usuario +") = UPPER('"+Usuario+"')";
+        int vcodusuario=0;
+        Cursor
+                c= database.rawQuery(selectQuery , null);
+        if (c.moveToFirst()) {
+            do {
+                vcodusuario= Integer.parseInt(c.getString(c.getColumnIndex(variables_publicas.USUARIOS_COLUMN_Codigo)));
+            } while (c.moveToNext());
+        }
+        c.close();
+        return vcodusuario;
     }
     public Usuario BuscarUltimoUsuario() {
         Usuario usuario=null;

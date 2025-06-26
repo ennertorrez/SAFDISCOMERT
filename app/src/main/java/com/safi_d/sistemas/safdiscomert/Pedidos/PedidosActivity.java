@@ -96,6 +96,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -1218,7 +1219,9 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
 
                 /*Primero sumamos las cantidades de los items para la escala*/
                 for (HashMap<String, String> item : listaArticulos) {
-                    if (vArticulos.contains(item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_CodigoArticulo)) && item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_TipoArt).equalsIgnoreCase("P")) {
+                    String codigo = item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_CodigoArticulo);
+                    List<String> listaCodigosEscala = Arrays.asList(vArticulos.split(","));
+                    if (listaCodigosEscala.contains(codigo) && item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_TipoArt).equalsIgnoreCase("P")) {
                         cantidad += (int) Double.parseDouble(item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_Cantidad));
                     }
 
@@ -1236,18 +1239,96 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                     entra=false;
                 }
                 if(entra){
-                    double  subtotaldetalle=0;
-                    double  descuento=0;
-                    double  porIva=0;
-                    double  iva=0;
-                    double tot=0;
+                    double subtotaldetalle = 0;
+                    double descuento = 0;
+                    double porIva = 0;
+                    double iva = 0;
+                    double tot = 0;
+
+                    List<String> listaCodigosEscala = Arrays.asList(vArticulos.split(","));
+
                     for (HashMap<String, String> item : listaArticulos) {
-                        if (vArticulos.contains(item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_CodigoArticulo)) && item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_TipoArt).equals("P")) {
+                        String codigo = item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_CodigoArticulo);
+                        if (listaCodigosEscala.contains(codigo) && item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_TipoArt).equals("P")) {
+
                             item.put(variables_publicas.PEDIDOS_DETALLE_COLUMN_Precio, String.valueOf(precio));
                             item.put(variables_publicas.PEDIDOS_DETALLE_COLUMN_TipoPrecio, "Escala");
+
                             subtotaldetalle = Double.parseDouble(item.get("Precio")) * Double.parseDouble(item.get("Cantidad"));
                             descuento = subtotaldetalle * (Double.parseDouble(item.get("PorDescuento")) / 100);
                             subtotaldetalle = subtotaldetalle - descuento;
+
+                            if (variables_publicas.AplicaIVAGral.equalsIgnoreCase("1")) {
+                                if (cliente.getExcento().equalsIgnoreCase("1")) {
+                                    porIva = 0;
+                                } else {
+                                    porIva = Double.parseDouble(articulo.getPorIva());
+                                }
+                            } else {
+                                porIva = 0;
+                            }
+
+                            iva = subtotaldetalle * porIva;
+                            tot = subtotaldetalle + iva;
+
+                            item.put("Descuento", df.format(descuento));
+                            item.put("PorcentajeIva", String.valueOf(porIva));
+                            item.put("Iva", df.format(iva));
+                            item.put("SubTotal", df.format(subtotaldetalle));
+                            item.put("Total", df.format(tot));
+                        }
+                    }
+                }else{
+                    List<String> listaCodigosEscala = Arrays.asList(vArticulos.split(","));
+                    String vprecio2="0";
+                    double subtotal = 0;
+                    double descuento = 0;
+                    double porIva = 0;
+                    double iva = 0;
+                    double tot = 0;
+                    for (HashMap<String, String> item : listaArticulos) {
+                        String codigo = item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_CodigoArticulo);
+                        if (listaCodigosEscala.contains(codigo) && item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_TipoArt).equals("P")) {
+                            final HashMap<String, String> itemArticulo2 = item;
+                            List<Articulo> precios = TPreciosH.ObtenerPrecioPorUM(codigo);
+                            if (precios.size()==0){
+                                if (cliente.getTipoPrecio().equalsIgnoreCase("3")||cliente.getTipoPrecio().equalsIgnoreCase("4")||cliente.getTipoPrecio().equalsIgnoreCase("6")){
+                                    vTipoPrecio = "1";
+                                }else{
+                                    vTipoPrecio = cliente.getTipoPrecio();
+                                }
+
+                            }else {
+                                for (int i = 0; i < precios.size(); i++) {
+                                    if (idTipo==1||idTipo==3||idTipo==4||idTipo==6){
+                                        if  ((int) Integer.parseInt(item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_Cantidad))>=Integer.parseInt(precios.get(i).getUnidadCajaVenta2())){
+                                            vprecio2=precios.get(i).getPrecio5();
+                                            vTipoPrecio=ClientesH.ObtenerDescripcion(variables_publicas.TPRECIOS_COLUMN_TIPO_PRECIO,variables_publicas.TABLE_TPRECIOS,variables_publicas.TPRECIOS_COLUMN_COD_TIPO_PRECIO,"5");
+                                        }else if  ((int) Integer.parseInt(item.get(variables_publicas.PEDIDOS_DETALLE_COLUMN_Cantidad))>=Integer.parseInt(precios.get(i).getUnidadCajaVenta())){
+                                            vprecio2=precios.get(i).getPrecio2();
+                                            vTipoPrecio=ClientesH.ObtenerDescripcion(variables_publicas.TPRECIOS_COLUMN_TIPO_PRECIO,variables_publicas.TABLE_TPRECIOS,variables_publicas.TPRECIOS_COLUMN_COD_TIPO_PRECIO,"2");
+                                        }else{
+                                            vprecio2=precios.get(i).getPrecio();
+                                            vTipoPrecio=ClientesH.ObtenerDescripcion(variables_publicas.TPRECIOS_COLUMN_TIPO_PRECIO,variables_publicas.TABLE_TPRECIOS,variables_publicas.TPRECIOS_COLUMN_COD_TIPO_PRECIO,"1");
+                                        }
+                                    }else if (idTipo==5){
+                                        vprecio2=precios.get(i).getPrecio5();
+                                        vTipoPrecio=ClientesH.ObtenerDescripcion(variables_publicas.TPRECIOS_COLUMN_TIPO_PRECIO,variables_publicas.TABLE_TPRECIOS,variables_publicas.TPRECIOS_COLUMN_COD_TIPO_PRECIO,"5");
+                                    }else if (idTipo==2){
+                                        vprecio2=precios.get(i).getPrecio2();
+                                        vTipoPrecio=ClientesH.ObtenerDescripcion(variables_publicas.TPRECIOS_COLUMN_TIPO_PRECIO,variables_publicas.TABLE_TPRECIOS,variables_publicas.TPRECIOS_COLUMN_COD_TIPO_PRECIO,"2");
+                                    }else{
+                                        vprecio2=precios.get(i).getPrecio();
+                                        vTipoPrecio=ClientesH.ObtenerDescripcion(variables_publicas.TPRECIOS_COLUMN_TIPO_PRECIO,variables_publicas.TABLE_TPRECIOS,variables_publicas.TPRECIOS_COLUMN_COD_TIPO_PRECIO,"1");
+                                    }
+
+                                }
+                            }
+                            itemArticulo2.put("Precio",vprecio2);
+                            itemArticulo2.put("TipoPrecio",vTipoPrecio);
+                            subtotal = Double.parseDouble(itemArticulo2.get("Precio")) * Double.parseDouble(itemArticulo2.get("Cantidad"));
+                            descuento = subtotal * (Double.parseDouble(itemArticulo2.get("PorDescuento")) / 100);
+                            subtotal = subtotal - descuento;
 
                             if (variables_publicas.AplicaIVAGral.equalsIgnoreCase("1")){
                                 if (cliente.getExcento().equalsIgnoreCase("1")){
@@ -1262,13 +1343,17 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                             }else{
                                 porIva=0;
                             }
-                            iva = subtotaldetalle * porIva;
-                            tot = subtotaldetalle + iva;
-                            item.put("Descuento", df.format(descuento));
-                            item.put("PorcentajeIva",String.valueOf(porIva));
-                            item.put("Iva", df.format(iva));
-                            item.put("SubTotal", df.format(subtotaldetalle));
-                            item.put("Total", df.format(tot));
+                            iva = subtotal * porIva;
+                            tot = subtotal + iva;
+                            itemArticulo2.put("Descuento", df.format(descuento));
+                            itemArticulo2.put("PorcentajeIva",String.valueOf(porIva));
+                            itemArticulo2.put("Iva", df.format(iva));
+                            itemArticulo2.put("SubTotal", df.format(subtotal));
+                            itemArticulo2.put("Total", df.format(tot));
+
+                            adapter.notifyDataSetChanged();
+                            lv.setAdapter(adapter);
+
                         }
                     }
                 }

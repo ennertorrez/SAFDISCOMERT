@@ -326,7 +326,7 @@ public class Funciones {
     public boolean SendMail(String subject, String body, String from, String recipients) {
 
         try {
-            GMailSender sender = new GMailSender("dlunasistemas@gmail.com", "dluna2019");
+            GMailSender sender = new GMailSender("dlunasistemas@gmail.com", "ezssfzadjjytzopt");
             sender.sendMail(subject,
                     body,
                     from,

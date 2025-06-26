@@ -77,6 +77,7 @@ import org.jsoup.select.Elements;
 
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -196,6 +197,7 @@ public class Login extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                CheckConnectivity();
                 if (s.length() > 0) {
                     if(isOnline){
                         if (Build.VERSION.SDK_INT >= 11) {
@@ -205,6 +207,8 @@ public class Login extends Activity {
                             //--GB uses ThreadPoolExecutor by default--
                             new GetRutasUsuario().execute();
                         }
+                    }else{
+                        CargarComboRutaVendedor();
                     }
                 }else {
                     if(isOnline){
@@ -215,6 +219,8 @@ public class Login extends Activity {
                             //--GB uses ThreadPoolExecutor by default--
                             new GetRutasTotal().execute();
                         }
+                    }else{
+                        CargarComboRutaVendedor();
                     }
                 }
             }
@@ -282,6 +288,12 @@ public class Login extends Activity {
 
                 Usuario = txtUsuario.getText().toString();
                 Contrasenia = txtPassword.getText().toString();
+                String vruta = "";
+                if (cboRutas.getAdapter().isEmpty()){
+                    vruta = "";
+                }else{
+                    vruta = "RutaSeleccionada";
+                }
 
                 if (TextUtils.isEmpty(Usuario)) {
                     txtUsuario.setError("Ingrese el nombre de usuario");
@@ -291,7 +303,11 @@ public class Login extends Activity {
                     txtPassword.setError("Ingrese la contraseña");
                     return;
                 }
-
+                if (vruta.equals("")) {
+                    mensajeAviso("Seleccione la ruta");
+                    cboRutas.requestFocus();
+                    return;
+                }
                 //Esto sirve para permitir realizar conexion a internet en el Hilo principal
 
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -746,11 +762,12 @@ public class Login extends Activity {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
                     // Getting JSON Array node
+                    RutasH.EliminaRutas();
                     JSONArray Rutas = jsonObj.getJSONArray("GetRutasUsrResult");
                     if (Rutas.length() == 0) {
                         return null;
                     }
-                    RutasH.EliminaRutas();
+
                     // looping through All Contacts
 
 
@@ -766,6 +783,7 @@ public class Login extends Activity {
 
                 } catch (final JSONException e) {
                     Log.e(TAG, "error: " + "No se ha podido establecer contacto con el servidor");
+                    CargarComboRutaVendedor();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -779,6 +797,7 @@ public class Login extends Activity {
             } else {
 
                 Log.e(TAG, "No se ha podido establecer contacto con el servidor");
+                CargarComboRutaVendedor();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1041,6 +1060,64 @@ public class Login extends Activity {
         cboRutas.setAdapter(adapterRutas);
         if (!adapterRutas.isEmpty()) {
             cboRutas.setSelection(0);
+        }
+    }
+
+    private void CargarComboRutaVendedor() {
+        if (variables_publicas.usuario == null) {
+            int codigousuario=UsuariosH.BuscarCodigoUsuarios(txtUsuario.getText().toString());
+            List<Ruta> CRutas = RutasH.ObtenerRutaVendedor(codigousuario);
+            if (CRutas == null) {
+                Log.e("CargarComboRuta", "La lista de rutas es null");
+                CRutas = new ArrayList<>(); // Evita crash al pasar lista nula al adapter
+            }
+
+            if (cboRutas == null) {
+                Log.e("CargarComboRuta", "El Spinner cboRutas no está inicializado");
+                return;
+            }
+
+            ArrayAdapter<Ruta> adapterRutas = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, CRutas);
+            adapterRutas.setDropDownViewResource(android.R.layout.simple_list_item_checked);
+            cboRutas.setAdapter(adapterRutas);
+
+            if (!adapterRutas.isEmpty()) {
+                cboRutas.setSelection(0);
+            }
+        }else {
+
+            String codigoStr = variables_publicas.usuario.getCodigo();
+            if (codigoStr == null || codigoStr.isEmpty()) {
+                Log.e("CargarComboRuta", "El código del usuario es null o vacío");
+                return;
+            }
+
+            int codigo;
+            try {
+                codigo = Integer.parseInt(codigoStr);
+            } catch (NumberFormatException e) {
+                Log.e("CargarComboRuta", "Código de usuario inválido: " + codigoStr, e);
+                return;
+            }
+
+            List<Ruta> CRutas = RutasH.ObtenerRutaVendedor(codigo);
+            if (CRutas == null) {
+                Log.e("CargarComboRuta", "La lista de rutas es null");
+                CRutas = new ArrayList<>(); // Evita crash al pasar lista nula al adapter
+            }
+
+            if (cboRutas == null) {
+                Log.e("CargarComboRuta", "El Spinner cboRutas no está inicializado");
+                return;
+            }
+
+            ArrayAdapter<Ruta> adapterRutas = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, CRutas);
+            adapterRutas.setDropDownViewResource(android.R.layout.simple_list_item_checked);
+            cboRutas.setAdapter(adapterRutas);
+
+            if (!adapterRutas.isEmpty()) {
+                cboRutas.setSelection(0);
+            }
         }
     }
 
